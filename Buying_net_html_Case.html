@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Taiwan Buying Net</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/website icon.ico') }}">
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+</head>
+
+<body>
+    <header class="bar_header">
+        <!--網站標題-->
+        <a href="{{ url_for('home_index') }}"><img src="{{ url_for('static', filename='images/website.png') }}"></a>
+        <!-- <h1><a href="{{ url_for('home_index') }}">臺 灣 公 報 資 訊 網</a></h1>
+        <h2 id="englishTitle"><a href="{{ url_for('home_index') }}">Taiwan Buying Information Net</a></h2>
+        <img src="{{ url_for('static', filename='images/website icon.png') }}"> -->
+        <!--<input id="button_Login" type="button" value="Login" onclick="">-->
+    </header>
+
+
+    <ul id="tabs">
+        <li><a onclick="history.back()" name="tab1">上 一 頁</a></li>
+    </ul>
+
+    <div id="content">
+        <div id="tab1">
+            <div class="col-left">
+                <div class="col-left-1">
+                    <!--標案名稱區塊-->
+                    <h1>標 案 名 稱</h1>
+                    <p>{{ case_detail.Case_Name }}</p>
+                </div>
+                <div class="col-left-2">
+                    <!--採購單位名稱區塊-->
+                    <h1>採 購 單 位</h1>
+                    <p>{{ tender_detail.Tender_Unit_Name }}</p>
+                </div>
+
+                <div class="col-left-2">
+                    <!--得標廠商名稱區塊-->
+                    <h1>得 標 廠 商</h1>
+                    <p>{{ winner_detail.Company_Name }}</p>
+                </div>
+                <div class="col-left-3">
+                    <div class="col-55">
+                        <h1>標 案 資 訊</h1>
+                        <!--標案資訊列-->
+                        <div class="CaseInfo_{{case_detail.Case_id}}">預算金額:&nbsp; NT$&nbsp;{{ case_detail.Case_Budget_Price | currencyFormat }}</div>
+                        <div class="CaseInfo_{{case_detail.Case_id}}">決標金額:&nbsp; NT$&nbsp;{{ case_detail.Case_Final_Price | currencyFormat }}</div>
+                        <div class="CaseInfo_{{case_detail.Case_id}}">公布日期:&nbsp; {{ case_detail.Case_Start_Date }}</div>
+                        <div class="CaseInfo_{{case_detail.Case_id}}">決標日期:&nbsp; {{ case_detail.Case_End_Date }}</div>
+                        <div class="CaseInfo">標案狀態:&nbsp; {{ case_detail.status }}</div>
+                    </div>
+                    <div class="col-45">
+                        <!--競業列表區塊-->
+                        <h1>競 業 列 表</h1>
+                        <div>
+                            <table>
+                                <tr>
+                                    <th> 競 業 廠 商 </th>
+                                    <th> 投 標 金 額 </th>
+                                </tr>
+                                {% for i in compete_detail %} {% set item_1 = compete_detail[loop.index-1] %} {% set item_2 = compete_price[loop.index-1] %}
+                                <tr>
+                                    <td> {{ item_1.Company_Name }} </td>
+                                    <td> NT${{ item_2.Bidder_case_price | currencyFormat }} </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-right">
+
+                <div class="col-right-1">
+                    <!--採購單位參與標案列標題-->
+                    <h1>採 購 單 位 標 案 列 表</h1>
+                    <div class="col-result-II">
+                        <ul>
+                            {% for case in tender_case_list %}
+                            <li class="case_{{ case.Case_id }}" name="{{ case.Case_id }}" data-index="{{ case.Case_Name }}">
+                                <a href='/case_detail?cid={{ case.Case_id }}'>{{ case.Case_Name }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-right-1">
+                    <!--得標廠商參與標案列標題-->
+                    <h1>得 標 廠 商 參 與 標 案 列 表</h1>
+                    <div class="col-result-II">
+                        <ul>
+                            {% for case in winner_case_list %} {% if case.Case_id != case_detail.Case_id %}
+                            <li class="case_{{ case.Case_id }}" name="{{ case.Case_id }}" data-index="{{ case.Case_Name }}">
+                                <a href='/case_detail?cid={{ case.Case_id }}'>{{ case.Case_Name }}</a>
+                            </li> {% endif %} {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/Buying_net_js_Case.js') }}"></script>
+</body>
+
+</html>

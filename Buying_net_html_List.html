@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Taiwan Buying Net</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/website icon.ico') }}">
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <header class="bar_header">
+        <!--網站標題-->
+        <a href="{{ url_for('home_index') }}"><img src="{{ url_for('static', filename='images/website.png') }}"></a>
+        <!-- <h1><a href="{{ url_for('home_index') }}">臺 灣 公 報 資 訊 網</a></h1>
+        <h2 id="englishTitle"><a href="{{ url_for('home_index') }}">Taiwan Buying Information Net</a></h2>
+        <img src="{{ url_for('static', filename='images/website icon.png') }}"> -->
+        <!--<input id="button_Login" type="button" value="Login" onclick="">-->
+    </header>
+
+
+    <ul id="tabs">
+        <li><a onclick="history.back()" name="tab1">上 一 頁</a></li>
+    </ul>
+
+    <div id="content">
+        <div id="tab1">
+            <div class="col-content">
+                <div class="col-50">
+                    <!--廠商參與其他標案列表-->
+                    <h1>選 取 廠 商</h1>
+                    <div class="col-result-I">
+                        <ul class="search_result_company">
+                            {% if search_result_company %} {% for company in search_result_company %}
+                            <li name="{{ company.Company_id }}" data-index="{{ company.Company_Name }}">
+                                <a value='{{ company.Company_id }}' onclick="send_company_id('{{ company.Company_Name }}')" tabindex="1">{{ company.Company_Name }}</a>
+                            </li>
+                            {% endfor %}{% endif %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-50">
+                    <!--廠商參與其他標案列表-->
+                    <h1>選 取 採 購 單 位</h1>
+                    <div class="col-result-I">
+                        <ul class="search_result_tender_unit">
+                            {% if search_result_tender_unit %} {% for tender_unit in search_result_tender_unit %}
+                            <li name="{{ tender_unit.Tender_Unit_id }} " data-index="{{ tender_unit.Tender_Unit_Name }} ">
+                                <a value='{{ tender_unit.Tender_Unit_id }}' onclick="send_tender_unit_id('{{ tender_unit.Tender_Unit_Name }}')" tabindex="1">{{ tender_unit.Tender_Unit_Name }}</a>
+                            </li>
+                            {% endfor %}{% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!--form隱藏-->
+            <form class="input_detail_list" name="case_search" method="POST" action="/case_search">
+                <h1>搜 尋 條 件 設 定</h1>
+                <label for="text_search"></label>
+                <input type="text" class="search" name="case_search" placeholder="Search" value="{{ Case_Name }}" aria-label="Search" aria-describedby="search-addon" />
+
+                <br>
+
+                <label for="start_date">公 布 日 期 </label>
+                <input type="text" id="start_date_begin" placeholder="在這邊輸入(例:1990-01-01)" value="{{ start_date_begin }}" name="start_date_begin">
+                <input type="text" id="start_date_final" placeholder="在這邊輸入(例:1990-01-01)" value="{{ start_date_final }}" name="start_date_final">
+
+                <label for="end_date">結 標 日 期 </label>
+                <input type="text" id="end_date_begin" placeholder="在這邊輸入(例:1990-01-01)" value="{{ end_date_begin }}" name="end_date_begin">
+                <input type="text" id="end_date_final" placeholder="在這邊輸入(例:1990-01-01)" value="{{ end_date_final }}" name="end_date_final">
+
+
+                <label for="price">決 標 金 額 </label>
+                <input type="text" id="price_start" placeholder="在這邊輸入" value="{{ price_start }}" name="price_start">
+                <input type="text" id="price_end" placeholder="在這邊輸入" value="{{ price_end }}" name="price_end">
+
+
+                <label for="status">標 案 狀 態 </label>
+                <select id="status" name="status">
+                    <option selected value ="{{ status }}">請選擇標案狀態</option>
+                    <option value="0">招標</option>
+                    <option value="1">決標</option>
+                </select>
+
+                <label for="company_case_search">廠 商 選 取</label>
+                <input type="text" class="anothersearch" name="company_case_search" placeholder="Search" value="{{ Company_Name }}" aria-label="Search" aria-describedby="search-addon"></input>
+
+                <label for="tender_case_search">採 購 單 位</label>
+                <input type="text" class="anothersearch" name="tender_case_search" placeholder="Search" value="{{ Tender_Unit_Name }}" aria-label="Search" aria-describedby="search-addon" />
+
+
+                <input type="submit" class="submit_data" value="下 一 步" />
+            </form>
+
+        </div>
+    </div>
+
+    <script src="{{ url_for( 'static', filename='js/Buying_net_js_List.js' ) }} "></script>
+</body>
+
+</html>
